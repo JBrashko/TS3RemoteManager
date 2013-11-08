@@ -348,7 +348,7 @@ namespace ClientQueryMonitor
             listener.Listen(20);
             addLogMessage("Started listening on port:" + port,false);
             AsyncCallback callback = new AsyncCallback(ListenCallback);
-            listener.BeginAccept(callback, listener);
+            listener.BeginAccept(callback, listener);   
             hostStart.Enabled = false;
         }
 
