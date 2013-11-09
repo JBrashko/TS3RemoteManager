@@ -443,11 +443,9 @@ namespace ClientQueryMonitor
             tempTimeHeader});
             tempmessageview.Dock = System.Windows.Forms.DockStyle.Fill;
             tempmessageview.GridLines = true;
-            //tempmessageview.Location = new System.Drawing.Point(3, 3);
             tempmessageview.Name = "Remote" + handler.getID() + "CQMessages";
             tempmessageview.View = System.Windows.Forms.View.Details;
             tempmessageview.Size = MessageView.Size;
-            //tempmessageview.UseCompatibleStateImageBehavior = false;
             buildpage.Controls.Add(tempmessageview);
             return buildpage;
         }
