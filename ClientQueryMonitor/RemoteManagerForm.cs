@@ -498,6 +498,10 @@ namespace ClientQueryMonitor
         public void doStuff()
         {
             thisthread = Thread.CurrentThread;
+            if (!running)
+            {
+                return;
+            }
             Thread.Sleep(10 * 1000);
             while (running)
             {
@@ -526,7 +530,10 @@ namespace ClientQueryMonitor
         public void Close()
         {
             running = false;
-            thisthread.Interrupt();
+            if (thisthread.ThreadState == ThreadState.Suspended)
+            {
+                thisthread.Interrupt();
+            }
         }
         public void addSleepTime()
         {
