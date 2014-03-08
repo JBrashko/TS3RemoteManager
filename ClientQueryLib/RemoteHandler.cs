@@ -5,14 +5,14 @@ using System.Text;
 using System.Net.Sockets;
 using System.Drawing;
 
-namespace ClientQueryMonitor
+namespace ClientQueryLib
 {
-    public class RemoteHandler :Handler
+    public class RemoteHandler :Handler, RemoteInterface
     {
         private bool recievenotify = false;
         private Color handlerColor;     
         private int ID;
-        public RemoteHandler(Socket _connection, RemoteManager _parent, Color _handlerColor,int _ID)
+        public RemoteHandler(Socket _connection, ManagerFormInterface _parent, Color _handlerColor, int _ID)
         {
             this.connection = _connection;
             parent = _parent;

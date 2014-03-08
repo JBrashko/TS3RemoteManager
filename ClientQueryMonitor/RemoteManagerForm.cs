@@ -10,21 +10,28 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System.Text.RegularExpressions;
+using LibUsbDotNet;
+using LibUsbDotNet.Main;
+using LibUsbDotNet.Info;
+using System.Collections.ObjectModel;
+using LibUsbDotNet.DeviceNotify;
+using ClientQueryLib;
 
 namespace ClientQueryMonitor
 {
-    public partial class RemoteManager : Form
+    public partial class RemoteManager : Form, ManagerFormInterface
     {
         delegate void LogCallback(string message, bool recieving);
         delegate void TabPageCallback(TabPage page);
         delegate void SpecificListViewCallback(ListViewItem item, ListView view);
+        private IDeviceNotifier USBDeviceNotifier;
         private Color managerColour = Color.Coral;
         private Color automatedColor = Color.LightCoral;
         private Color notifyColor = Color.LightSkyBlue;
         private KeepAlive keepAlive;
-        private RemoteHandler manager;
+        private RemoteInterface manager;
         TS3ClientHandler TS3ClientStuff;
-        List<RemoteHandler> RemoteHandlers = new List<RemoteHandler>();
+        List<RemoteInterface> RemoteInterfaces = new List<RemoteInterface>();
         List<CommandLog> CommandHistory = new List<CommandLog>();
         int HistoryPosition = 0;
         Thread netThread;
@@ -35,7 +42,10 @@ namespace ClientQueryMonitor
         public RemoteManager()
         {
             InitializeComponent();
-            manager = new RemoteHandler(null, this, managerColour, -1);
+            manager = new ManagerHandler(this, managerColour);
+            USBDeviceNotifier = DeviceNotifier.OpenDeviceNotifier();
+            USBDeviceNotifier.Enabled = false;
+            USBDeviceNotifier.OnDeviceNotify += OnDeviceNotifyEvent;
         }
 
         private void ConnectButton_Click(object sender, EventArgs e)
@@ -62,7 +72,7 @@ namespace ClientQueryMonitor
             Thread keepAliveThread = new Thread(new ThreadStart(keepAlive.doStuff));
             keepAliveThread.Start();
         }
-        private void addSentCQMessage(String message,RemoteHandler handler)
+        private void addSentCQMessage(String message,RemoteInterface handler)
         {
             ListViewItem item = makeBaseMessageItem(message, false);
             if (handler == null)
@@ -92,11 +102,11 @@ namespace ClientQueryMonitor
             {//this is a notify message
                 item = makeNotifyMessageItem(message);
                 addNotifyMessage(item);
-                foreach (RemoteHandler handler in RemoteHandlers)
+                foreach (RemoteInterface remote in RemoteInterfaces)
                 {
-                    if (handler.recievesNotify && handler.isRunning)
+                    if (remote.recievesNotify && remote.isRunning)
                     {
-                        handler.send(message);
+                        remote.send(message);
                     }
                 }
             }
@@ -111,7 +121,7 @@ namespace ClientQueryMonitor
                     TS3ClientStuff.UsedSCHandler = n;
                 }
                 if (CommandHistory.Count <= HistoryPosition)
-                {
+                { 
                     String stuff = "Invalid history position";
                     addLogMessage(stuff, true);
                     item.BackColor = Color.Yellow;
@@ -119,7 +129,7 @@ namespace ClientQueryMonitor
                 else
                 {
                     CommandLog current = CommandHistory[HistoryPosition];
-                    RemoteHandler usedHandler = current.Handler;
+                    RemoteInterface usedHandler = current.Handler;
                     String command = current.Command;
 
                     if ((usedHandler != null))
@@ -166,97 +176,8 @@ namespace ClientQueryMonitor
             return item;
 
         }
-        /*private ListViewItem makeMessageItem(String message, bool recieving,RemoteHandler source)
-        {
-            ListViewItem item = new ListViewItem(message);
-            item.SubItems.Add(recieving.ToString());
-            item.SubItems.Add(DateTime.UtcNow.ToLongTimeString());
-            if (!TS3ClientStuff.isInitialised)
-            {
-                item.BackColor = automatedColor;
-                addCQMessageToSpecificList(item, getListViewByHandler(null));
-                return item;
-            }
-            if (recieving)
-            {
-                Match isNotify = notifyMessage.Match(message);
-                if (isNotify.Success && !isNotify.Groups[1].ToString().Equals("selected"))
-                {//this is a notify message
-                    String notifyEvent = isNotify.Groups[1].ToString();
-                    if (notifyEvent.Equals("notifycurrentserverconnectionchanged"))
-                    {
-                        int n = Int32.Parse(isNotify.Groups[2].ToString());
-                        TS3ClientStuff.displayedSCHandler = n;
-                    }
-                    item.BackColor = Color.LightSkyBlue;
-                    addNotifyMessage(item);
-                    foreach (RemoteHandler handler in RemoteHandlers)
-                    {
-                        if (handler.recievesNotify && handler.isRunning)
-                        {
-                            handler.send(message);
-                        }
-                    }
 
-                }
-                else
-                {//this is a responce to a command
-                    String s = isNotify.Groups[1].ToString();
-                    bool usedSCHandlerChanged = s.Equals("selected");
-                    if (usedSCHandlerChanged)
-                    {
-                        int n = Int32.Parse(isNotify.Groups[2].ToString());
-                        TS3ClientStuff.UsedSCHandler = n;
-                    }
-                    if (CommandHistory.Count <= HistoryPosition)
-                    {
-                        String stuff = "Invalid history position";
-                        addLogMessage(stuff, true);
-                        item.BackColor = Color.Yellow;
-                    }
-                    else
-                    {
-                        CommandLog current = CommandHistory[HistoryPosition];
-                        RemoteHandler usedHandler = current.Handler;
-                        String command = current.Command;
-
-                        if (usedHandler != null)
-                        {
-                            usedHandler.send(message);
-                            item.BackColor = usedHandler.HandlerColor;
-                            if (usedSCHandlerChanged)
-                            {
-                                usedHandler.UsedSCHandler = Int32.Parse(isNotify.Groups[2].ToString());
-                            }
-                        }
-                        else
-                        {
-                            item.BackColor = managerColour;
-
-                        }
-                        addCQMessageToSpecificList(item, getListViewByHandler(usedHandler));
-                        if (commandResponse.IsMatch(message))
-                        {
-                            HistoryPosition++;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (source != null)
-                {
-                    item.BackColor = source.HandlerColor;
-                }
-                else
-                {
-                    item.BackColor = managerColour;
-                }
-                addCQMessageToSpecificList(item, getListViewByHandler(source));
-            }
-            return item;
-        }*/
-        private ListView getListViewByHandler(RemoteHandler handler)
+        private ListView getListViewByHandler(RemoteInterface handler)
         {
             if (handler == null)
             {
@@ -362,7 +283,7 @@ namespace ClientQueryMonitor
             sndBox.Clear();
             sendCommand(command, manager);
         }
-        private void sendCommand(String command, RemoteHandler handler)
+        private void sendCommand(String command, RemoteInterface handler)
         {
             if ((handler != null)&&(handler.UsedSCHandler!=TS3ClientStuff.UsedSCHandler))
             {
@@ -382,11 +303,11 @@ namespace ClientQueryMonitor
             keepAlive.addSleepTime();
             
         }
-        public void sendCQCommand(String command, RemoteHandler handler)
+        public void sendCQCommand(String command, RemoteInterface handler)
         {
             sendCommand(command,handler);
         }
-        public void addHandledCQCommand(String command, RemoteHandler handler)
+        public void addHandledCQCommand(String command, RemoteInterface handler)
         {
 
         }
@@ -399,12 +320,12 @@ namespace ClientQueryMonitor
             listener = (Socket)result.AsyncState;
             handlerSocket = listener.EndAccept(result);
             listener.BeginAccept(new AsyncCallback(ListenCallback), listener);
-            RemoteHandler handler = new RemoteHandler(handlerSocket, this,Color.Azure,RemoteHandlers.Count);
+            RemoteHandler handler = new RemoteHandler(handlerSocket, this,Color.Azure,RemoteInterfaces.Count);
             Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
             handleThread.Start();
             handler.send(verifyconnect);
             addTabPage(makeRemotePage(handler));
-            RemoteHandlers.Add(handler);
+            RemoteInterfaces.Add(handler);
         }
         private void addTabPage(TabPage page)
         {
@@ -461,7 +382,7 @@ namespace ClientQueryMonitor
             {
                 TS3ClientStuff.BeginClose();
             }
-            foreach(RemoteHandler handler in RemoteHandlers)
+            foreach(RemoteInterface handler in RemoteInterfaces)
             {
                 if (handler.isRunning)
                 {
@@ -478,104 +399,90 @@ namespace ClientQueryMonitor
             }
         }
 
-
-    }
-
-    public class KeepAlive
-    {
-        private RemoteManager parent;
-        private bool running;
-        private string command;
-        private Thread thisthread;
-        private int KeepAliveTime;
-        public KeepAlive(RemoteManager _parent)
+        private void hostSecureStart_Click(object sender, EventArgs e)
         {
-            parent = _parent;
-            running = true;
-            command = "currentschandlerid";
-            KeepAliveTime = 1000 * 60*5;
+
         }
-        public void doStuff()
+
+        private void hostUSBstart_Click(object sender, EventArgs e)
         {
-            thisthread = Thread.CurrentThread;
-            if (!running)
+            if (USBDeviceNotifier.Enabled)
             {
-                return;
+                USBDeviceNotifier.Enabled = false;
+                hostUSBstart.Text = "Start USB host";
             }
-            Thread.Sleep(10 * 1000);
-            while (running)
+            else
             {
+                USBDeviceNotifier.Enabled = true;
+                hostUSBstart.Text = "Stop USB host";
+            }
+            
+
+
+        }
+        private void OnDeviceNotifyEvent(object sender, DeviceNotifyEventArgs e)
+        {
+            LibUsbDotNet.DeviceNotify.Info.IUsbDeviceNotifyInfo deviceInfo = e.Device;
+            switch (e.EventType)
+            {   case EventType.DeviceArrival:
+                break;
+                case EventType.DeviceRemoveComplete:
                 
-                try
-                {
-                    sendKeepAlive();
-
-                }
-                catch (Exception ex)
-                {
-                    parent.addLogMessage("Error sending KeepAlive message", true);
-                }
-                finally
-                {
-                    resetSleepTime();
-                }
-            }
-        }
-        private void sendKeepAlive()
-        {
-            parent.addLogMessage("Sending keep alive message", false);
-            parent.sendCQCommand(command, null);
-        }
-
-        public void Close()
-        {
-            running = false;
-            if (thisthread.ThreadState == ThreadState.Suspended)
-            {
-                thisthread.Interrupt();
-            }
-        }
-        public void addSleepTime()
-        {
-            try
-            {
-                if (running && (thisthread != null) && (thisthread.ThreadState == ThreadState.Suspended))
-                {
-                    parent.addLogMessage("KeepAlive, Extending sleep time", false);
-                    thisthread.Interrupt();
-                }
+                break;
+                case EventType.DeviceRemovePending:
+                break;
+                default:
+                break;
 
             }
-            catch (Exception ex)
-            {
-                parent.addLogMessage("KeepAlive, Error adding sleep time. ", false);
-            }
+            addLogMessage(e.ToString(), false);
         }
-        private void resetSleepTime()
+        private void USBScan_Click(object sender, EventArgs e)
         {
-            if (!running)
+            UsbRegDeviceList allDevices = UsbDevice.AllDevices;
+            UsbDeviceFinder finder = new UsbDeviceFinder(6473, 10, 216);//pid 10, vid 6473 rev 216
+            UsbRegDeviceList a = allDevices.FindAll(finder);
+            UsbDevice MyUsbDevice;
+            String asdf = "";
+            foreach (UsbRegistry device in a)
             {
-                return;
+                bool active = device.IsAlive;
+                bool usable = device.Open(out MyUsbDevice);
+                if (active && usable)
+                {
+                    asdf += MyUsbDevice.Info;
+                }
             }
-            try
+            String stuff = "asdf";
+            /*foreach (UsbRegistry usbRegistry in allDevices)
             {
-                Thread.Sleep(KeepAliveTime);
-            }
-            catch (ThreadInterruptedException ex)
-            {
-                parent.addLogMessage("keepAlive sleep event interrupted. ",false);
-                resetSleepTime();
-            }
-        }
-        public bool Running
-        {
-            get
-            {
-                return running;
-            }
+                if (usbRegistry.Open(out MyUsbDevice))
+                {
+                    addLogMessage(MyUsbDevice.Info.ToString(),false);
+                    for (int iConfig = 0; iConfig < MyUsbDevice.Configs.Count; iConfig++)
+                    {
+                        UsbConfigInfo configInfo = MyUsbDevice.Configs[iConfig];
+                        addLogMessage(configInfo.ToString(),false);
 
+                        ReadOnlyCollection<UsbInterfaceInfo> interfaceList = configInfo.InterfaceInfoList;
+                        for (int iInterface = 0; iInterface < interfaceList.Count; iInterface++)
+                        {
+                            UsbInterfaceInfo interfaceInfo = interfaceList[iInterface];
+                            addLogMessage(interfaceInfo.ToString(),false);
+
+                            ReadOnlyCollection<UsbEndpointInfo> endpointList = interfaceInfo.EndpointInfoList;
+                            for (int iEndpoint = 0; iEndpoint < endpointList.Count; iEndpoint++)
+                            {
+                                addLogMessage(endpointList[iEndpoint].ToString(),false);
+                            }
+                        }
+                    }
+                }
+            }*/
         }
     }
+
+    
     public class CommandLog
     {
         public string Command { get
@@ -583,7 +490,7 @@ namespace ClientQueryMonitor
             return command; 
         }}
         private string command = "";
-        public RemoteHandler Handler
+        public RemoteInterface Handler
         {
             get
             {
@@ -591,8 +498,8 @@ namespace ClientQueryMonitor
             }
 
         }
-        private RemoteHandler handler;
-        public CommandLog(String _command, RemoteHandler _handler)
+        private RemoteInterface handler;
+        public CommandLog(String _command, RemoteInterface _handler)
         {
             command = _command;
             handler=_handler;

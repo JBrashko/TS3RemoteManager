@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Net.Sockets;
 
-namespace ClientQueryMonitor
+namespace ClientQueryLib
 {
     public abstract class Handler
     {
-        protected RemoteManager parent;
+        protected ManagerFormInterface parent;
         protected bool running;
         protected Socket connection;
         protected int usedSCHandler = 1;
@@ -87,8 +87,15 @@ namespace ClientQueryMonitor
         public void BeginClose()
         {
             running = false;
-            connection.Shutdown(SocketShutdown.Both);
-            connection.BeginDisconnect(false, new AsyncCallback(CloseCallback), connection);
+            try
+            {
+                connection.Shutdown(SocketShutdown.Both);
+                connection.BeginDisconnect(false, new AsyncCallback(CloseCallback), connection);
+            }
+            catch (SocketException ex)
+            {
+
+            }
             //connection.BeginDisconnect(false,)
         }
         private static void CloseCallback(IAsyncResult ar)

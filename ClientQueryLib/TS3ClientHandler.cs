@@ -5,13 +5,13 @@ using System.Text;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 
-namespace ClientQueryMonitor
+namespace ClientQueryLib
 {
     public class TS3ClientHandler : Handler
     {
         private int initialisedState = 0;
         public int displayedSCHandler = 1;
-        public TS3ClientHandler(Socket _connection, RemoteManager _parent)
+        public TS3ClientHandler(Socket _connection, ManagerFormInterface _parent)
         {
             running = true;
             connection = _connection;

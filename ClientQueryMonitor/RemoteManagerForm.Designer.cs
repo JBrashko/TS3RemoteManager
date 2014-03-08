@@ -58,6 +58,10 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hostSecureStart = new System.Windows.Forms.Button();
+            this.hostUSBstart = new System.Windows.Forms.Button();
+            this.USBScan = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.MessageTabControl.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.LogTab.SuspendLayout();
@@ -132,7 +136,7 @@
             this.MessageTabControl.Location = new System.Drawing.Point(12, 70);
             this.MessageTabControl.Name = "MessageTabControl";
             this.MessageTabControl.SelectedIndex = 0;
-            this.MessageTabControl.Size = new System.Drawing.Size(630, 313);
+            this.MessageTabControl.Size = new System.Drawing.Size(630, 336);
             this.MessageTabControl.TabIndex = 7;
             // 
             // tabPage2
@@ -141,7 +145,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(622, 287);
+            this.tabPage2.Size = new System.Drawing.Size(622, 310);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "CQMessages";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -156,7 +160,7 @@
             this.MessageView.GridLines = true;
             this.MessageView.Location = new System.Drawing.Point(3, 3);
             this.MessageView.Name = "MessageView";
-            this.MessageView.Size = new System.Drawing.Size(616, 281);
+            this.MessageView.Size = new System.Drawing.Size(616, 304);
             this.MessageView.TabIndex = 0;
             this.MessageView.UseCompatibleStateImageBehavior = false;
             this.MessageView.View = System.Windows.Forms.View.Details;
@@ -181,7 +185,7 @@
             this.LogTab.Location = new System.Drawing.Point(4, 22);
             this.LogTab.Name = "LogTab";
             this.LogTab.Padding = new System.Windows.Forms.Padding(3);
-            this.LogTab.Size = new System.Drawing.Size(622, 287);
+            this.LogTab.Size = new System.Drawing.Size(622, 310);
             this.LogTab.TabIndex = 2;
             this.LogTab.Text = "RemoteLog";
             this.LogTab.UseVisualStyleBackColor = true;
@@ -196,7 +200,7 @@
             this.LogView.GridLines = true;
             this.LogView.Location = new System.Drawing.Point(3, 3);
             this.LogView.Name = "LogView";
-            this.LogView.Size = new System.Drawing.Size(616, 281);
+            this.LogView.Size = new System.Drawing.Size(616, 304);
             this.LogView.TabIndex = 1;
             this.LogView.UseCompatibleStateImageBehavior = false;
             this.LogView.View = System.Windows.Forms.View.Details;
@@ -218,7 +222,7 @@
             this.managerPage.Location = new System.Drawing.Point(4, 22);
             this.managerPage.Name = "managerPage";
             this.managerPage.Padding = new System.Windows.Forms.Padding(3);
-            this.managerPage.Size = new System.Drawing.Size(622, 287);
+            this.managerPage.Size = new System.Drawing.Size(622, 310);
             this.managerPage.TabIndex = 3;
             this.managerPage.Text = "Manager Messages";
             this.managerPage.UseVisualStyleBackColor = true;
@@ -260,7 +264,7 @@
             this.NotifyMessages.Location = new System.Drawing.Point(4, 22);
             this.NotifyMessages.Name = "NotifyMessages";
             this.NotifyMessages.Padding = new System.Windows.Forms.Padding(3);
-            this.NotifyMessages.Size = new System.Drawing.Size(622, 287);
+            this.NotifyMessages.Size = new System.Drawing.Size(622, 310);
             this.NotifyMessages.TabIndex = 4;
             this.NotifyMessages.Text = "NotifyMessages";
             this.NotifyMessages.UseVisualStyleBackColor = true;
@@ -275,7 +279,7 @@
             this.NotifyMessageView.GridLines = true;
             this.NotifyMessageView.Location = new System.Drawing.Point(3, 3);
             this.NotifyMessageView.Name = "NotifyMessageView";
-            this.NotifyMessageView.Size = new System.Drawing.Size(616, 281);
+            this.NotifyMessageView.Size = new System.Drawing.Size(616, 304);
             this.NotifyMessageView.TabIndex = 1;
             this.NotifyMessageView.UseCompatibleStateImageBehavior = false;
             this.NotifyMessageView.View = System.Windows.Forms.View.Details;
@@ -300,7 +304,7 @@
             this.AutomaticMessageTab.Location = new System.Drawing.Point(4, 22);
             this.AutomaticMessageTab.Name = "AutomaticMessageTab";
             this.AutomaticMessageTab.Padding = new System.Windows.Forms.Padding(3);
-            this.AutomaticMessageTab.Size = new System.Drawing.Size(622, 287);
+            this.AutomaticMessageTab.Size = new System.Drawing.Size(622, 310);
             this.AutomaticMessageTab.TabIndex = 5;
             this.AutomaticMessageTab.Text = "Automatic Messages";
             this.AutomaticMessageTab.UseVisualStyleBackColor = true;
@@ -315,7 +319,7 @@
             this.AutoMessageView.GridLines = true;
             this.AutoMessageView.Location = new System.Drawing.Point(3, 3);
             this.AutoMessageView.Name = "AutoMessageView";
-            this.AutoMessageView.Size = new System.Drawing.Size(616, 281);
+            this.AutoMessageView.Size = new System.Drawing.Size(616, 304);
             this.AutoMessageView.TabIndex = 2;
             this.AutoMessageView.UseCompatibleStateImageBehavior = false;
             this.AutoMessageView.View = System.Windows.Forms.View.Details;
@@ -334,11 +338,54 @@
             // 
             this.columnHeader3.Text = "Time";
             // 
+            // hostSecureStart
+            // 
+            this.hostSecureStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.hostSecureStart.Location = new System.Drawing.Point(464, 41);
+            this.hostSecureStart.Name = "hostSecureStart";
+            this.hostSecureStart.Size = new System.Drawing.Size(97, 23);
+            this.hostSecureStart.TabIndex = 8;
+            this.hostSecureStart.Text = "Start secure host";
+            this.hostSecureStart.UseVisualStyleBackColor = true;
+            this.hostSecureStart.Click += new System.EventHandler(this.hostSecureStart_Click);
+            // 
+            // hostUSBstart
+            // 
+            this.hostUSBstart.Location = new System.Drawing.Point(362, 41);
+            this.hostUSBstart.Name = "hostUSBstart";
+            this.hostUSBstart.Size = new System.Drawing.Size(85, 23);
+            this.hostUSBstart.TabIndex = 9;
+            this.hostUSBstart.Text = "Start USB host";
+            this.hostUSBstart.UseVisualStyleBackColor = true;
+            this.hostUSBstart.Click += new System.EventHandler(this.hostUSBstart_Click);
+            // 
+            // USBScan
+            // 
+            this.USBScan.Location = new System.Drawing.Point(12, 41);
+            this.USBScan.Name = "USBScan";
+            this.USBScan.Size = new System.Drawing.Size(98, 23);
+            this.USBScan.TabIndex = 10;
+            this.USBScan.Text = "Scan for devices";
+            this.USBScan.UseVisualStyleBackColor = true;
+            this.USBScan.Click += new System.EventHandler(this.USBScan_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Location = new System.Drawing.Point(0, 409);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(654, 22);
+            this.statusStrip1.TabIndex = 11;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
             // RemoteManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(654, 395);
+            this.ClientSize = new System.Drawing.Size(654, 431);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.USBScan);
+            this.Controls.Add(this.hostUSBstart);
+            this.Controls.Add(this.hostSecureStart);
             this.Controls.Add(this.MessageTabControl);
             this.Controls.Add(this.hostStart);
             this.Controls.Add(this.ClientIPtext);
@@ -390,6 +437,10 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.Button hostSecureStart;
+        private System.Windows.Forms.Button hostUSBstart;
+        private System.Windows.Forms.Button USBScan;
+        private System.Windows.Forms.StatusStrip statusStrip1;
     }
 }
 
