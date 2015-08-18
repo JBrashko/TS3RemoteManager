@@ -38,7 +38,7 @@ namespace ClientQueryMonitor
         Regex notifyMessage = new Regex("(\\S+)\\sschandlerid=(\\d+)\\s*(.*)");
         Regex commandResponse = new Regex("error\\sid=(\\d+)\\smsg=([^$]*)");
         private bool closing = false;
-        
+
         public RemoteManager()
         {
             InitializeComponent();
@@ -72,7 +72,7 @@ namespace ClientQueryMonitor
             Thread keepAliveThread = new Thread(new ThreadStart(keepAlive.doStuff));
             keepAliveThread.Start();
         }
-        private void addSentCQMessage(String message,RemoteInterface handler)
+        private void addSentCQMessage(String message, RemoteInterface handler)
         {
             ListViewItem item = makeBaseMessageItem(message, false);
             if (handler == null)
@@ -88,15 +88,16 @@ namespace ClientQueryMonitor
 
         }
         public void addRecievedCQMessage(String message)
-        {   ListViewItem item;
-        if (!TS3ClientStuff.isInitialised)
         {
-            item = makeRecievedMessageItem(message);
-            item.BackColor = automatedColor;
-            addCQMessageToSpecificList(item, getListViewByHandler(null));
-            addCQMessageToList(item);
-            return;
-        }
+            ListViewItem item;
+            if (!TS3ClientStuff.isInitialised)
+            {
+                item = makeRecievedMessageItem(message);
+                item.BackColor = automatedColor;
+                addCQMessageToSpecificList(item, getListViewByHandler(null));
+                addCQMessageToList(item);
+                return;
+            }
             Match isNotify = notifyMessage.Match(message);
             if (isNotify.Success && !isNotify.Groups[1].ToString().Equals("selected"))
             {//this is a notify message
@@ -121,7 +122,7 @@ namespace ClientQueryMonitor
                     TS3ClientStuff.UsedSCHandler = n;
                 }
                 if (CommandHistory.Count <= HistoryPosition)
-                { 
+                {
                     String stuff = "Invalid history position";
                     addLogMessage(stuff, true);
                     item.BackColor = Color.Yellow;
@@ -146,7 +147,7 @@ namespace ClientQueryMonitor
                     }
                     else
                     {
-                    item.BackColor = automatedColor;
+                        item.BackColor = automatedColor;
                     }
                     addCQMessageToSpecificList(item, getListViewByHandler(usedHandler));
                     if (commandResponse.IsMatch(message))
@@ -206,23 +207,23 @@ namespace ClientQueryMonitor
         }
         private void addCQMessageToSpecificList(ListViewItem item, ListView currentView)
         {
-            if ((currentView == null)||this.closing)
+            if ((currentView == null) || this.closing)
             {
                 return;
             }
 
-                if (currentView.InvokeRequired)
-                {
-                    SpecificListViewCallback d = new SpecificListViewCallback(addCQMessageToSpecificList);
-                    Object[] parameters = new Object[2];
-                    parameters[0] = item;
-                    parameters[1] = currentView;
-                    this.Invoke(d, parameters);
-                }
-                else
-                {
-                    currentView.Items.Add((ListViewItem)item.Clone());
-                }
+            if (currentView.InvokeRequired)
+            {
+                SpecificListViewCallback d = new SpecificListViewCallback(addCQMessageToSpecificList);
+                Object[] parameters = new Object[2];
+                parameters[0] = item;
+                parameters[1] = currentView;
+                this.Invoke(d, parameters);
+            }
+            else
+            {
+                currentView.Items.Add((ListViewItem)item.Clone());
+            }
         }
         public void addLogMessage(String message, bool error)
         {
@@ -264,12 +265,12 @@ namespace ClientQueryMonitor
             IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
-            Socket listener = new Socket(ipAddress.AddressFamily,SocketType.Stream, ProtocolType.Tcp);
+            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listener.Bind(localEndPoint);
             listener.Listen(20);
-            addLogMessage("Started listening on port:" + port,false);
+            addLogMessage("Started listening on port:" + port, false);
             AsyncCallback callback = new AsyncCallback(ListenCallback);
-            listener.BeginAccept(callback, listener);   
+            listener.BeginAccept(callback, listener);
             hostStart.Enabled = false;
         }
 
@@ -285,7 +286,7 @@ namespace ClientQueryMonitor
         }
         private void sendCommand(String command, RemoteInterface handler)
         {
-            if ((handler != null)&&(handler.UsedSCHandler!=TS3ClientStuff.UsedSCHandler))
+            if ((handler != null) && (handler.UsedSCHandler != TS3ClientStuff.UsedSCHandler))
             {
                 sendCommand("use " + handler.UsedSCHandler, null);
             }
@@ -301,11 +302,11 @@ namespace ClientQueryMonitor
                 int i = TS3ClientStuff.send(command.Trim() + '\r' + '\n');
             }
             keepAlive.addSleepTime();
-            
+
         }
         public void sendCQCommand(String command, RemoteInterface handler)
         {
-            sendCommand(command,handler);
+            sendCommand(command, handler);
         }
         public void addHandledCQCommand(String command, RemoteInterface handler)
         {
@@ -313,14 +314,14 @@ namespace ClientQueryMonitor
         }
         public void ListenCallback(IAsyncResult result)
         {
-            String verifyconnect = "TS3 Remote Manager"+Environment.NewLine+ "TS3 remote connected successfully" + Environment.NewLine + "selected schandlerid="+TS3ClientStuff.displayedSCHandler + Environment.NewLine;
-            addLogMessage("Remote connected",false);
+            String verifyconnect = "TS3 Remote Manager" + Environment.NewLine + "TS3 remote connected successfully" + Environment.NewLine + "selected schandlerid=" + TS3ClientStuff.displayedSCHandler + Environment.NewLine;
+            addLogMessage("Remote connected", false);
             Socket listener = null;
             Socket handlerSocket = null;
             listener = (Socket)result.AsyncState;
             handlerSocket = listener.EndAccept(result);
             listener.BeginAccept(new AsyncCallback(ListenCallback), listener);
-            RemoteHandler handler = new RemoteHandler(handlerSocket, this,Color.Azure,RemoteInterfaces.Count);
+            RemoteHandler handler = new RemoteHandler(handlerSocket, this, Color.Azure, RemoteInterfaces.Count);
             Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
             handleThread.Start();
             handler.send(verifyconnect);
@@ -343,7 +344,7 @@ namespace ClientQueryMonitor
         }
         private TabPage makeRemotePage(RemoteHandler handler)
         {
-            TabPage buildpage = new TabPage("Remote number "+handler.getID());
+            TabPage buildpage = new TabPage("Remote number " + handler.getID());
             ListView tempmessageview = new ListView();
             buildpage.Name = "RemotePage" + handler.getID();
             ColumnHeader tempMessageHeader = new ColumnHeader();
@@ -370,7 +371,12 @@ namespace ClientQueryMonitor
             buildpage.Controls.Add(tempmessageview);
             return buildpage;
         }
+        public void HandlerClose(Handler handler)
+        {
+            ListView a = getListViewByHandler((RemoteInterface)handler);
+            TabPage p = (TabPage)a.Parent;
 
+        }
         private void RemoteManager_FormClosed(object sender, FormClosedEventArgs e)
         {
             closing = true;
@@ -382,7 +388,7 @@ namespace ClientQueryMonitor
             {
                 TS3ClientStuff.BeginClose();
             }
-            foreach(RemoteInterface handler in RemoteInterfaces)
+            foreach (RemoteInterface handler in RemoteInterfaces)
             {
                 if (handler.isRunning)
                 {
@@ -401,7 +407,19 @@ namespace ClientQueryMonitor
 
         private void hostSecureStart_Click(object sender, EventArgs e)
         {
-
+            SocketPermission permission = new SocketPermission(NetworkAccess.Accept, TransportType.Tcp, "", SocketPermission.AllPorts);
+            permission.Demand();
+            int port = 25741;//Int32.Parse(hstPort.Text);
+            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
+            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            listener.Bind(localEndPoint);
+            listener.Listen(20);
+            addLogMessage("Started listening on port:" + port, false);
+            AsyncCallback callback = new AsyncCallback(ListenCallback);
+            listener.BeginAccept(callback, listener);
+            hostStart.Enabled = false;
         }
 
         private void hostUSBstart_Click(object sender, EventArgs e)
@@ -416,7 +434,7 @@ namespace ClientQueryMonitor
                 USBDeviceNotifier.Enabled = true;
                 hostUSBstart.Text = "Stop USB host";
             }
-            
+
 
 
         }
@@ -424,15 +442,16 @@ namespace ClientQueryMonitor
         {
             LibUsbDotNet.DeviceNotify.Info.IUsbDeviceNotifyInfo deviceInfo = e.Device;
             switch (e.EventType)
-            {   case EventType.DeviceArrival:
-                break;
+            {
+                case EventType.DeviceArrival:
+                    break;
                 case EventType.DeviceRemoveComplete:
-                
-                break;
+
+                    break;
                 case EventType.DeviceRemovePending:
-                break;
+                    break;
                 default:
-                break;
+                    break;
 
             }
             addLogMessage(e.ToString(), false);
@@ -481,36 +500,7 @@ namespace ClientQueryMonitor
             }*/
         }
     }
+}
 
     
-    public class CommandLog
-    {
-        public string Command { get
-        {
-            return command; 
-        }}
-        private string command = "";
-        public RemoteInterface Handler
-        {
-            get
-            {
-                return handler;
-            }
-
-        }
-        private RemoteInterface handler;
-        public CommandLog(String _command, RemoteInterface _handler)
-        {
-            command = _command;
-            handler=_handler;
-        }
-        public String toString()
-        {
-            return command;
-        }
-
-        
-
-
-    }
-}
+    

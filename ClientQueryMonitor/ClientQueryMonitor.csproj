@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLog.cs" />
     <Compile Include="RemoteManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -119,7 +119,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sndBox.Location = new System.Drawing.Point(6, 261);
             this.sndBox.Name = "sndBox";
-            this.sndBox.Size = new System.Drawing.Size(529, 20);
+            this.sndBox.Size = new System.Drawing.Size(529, 22);
             this.sndBox.TabIndex = 6;
             this.sndBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.sndBox_KeyPress);
             // 
@@ -219,6 +219,8 @@
             this.managerPage.Controls.Add(this.managerCQMessages);
             this.managerPage.Controls.Add(this.sndButton);
             this.managerPage.Controls.Add(this.sndBox);
+            this.managerPage.Font = new System.Drawing.Font("Microsoft MHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.managerPage.ForeColor = System.Drawing.SystemColors.ControlText;
             this.managerPage.Location = new System.Drawing.Point(4, 22);
             this.managerPage.Name = "managerPage";
             this.managerPage.Padding = new System.Windows.Forms.Padding(3);

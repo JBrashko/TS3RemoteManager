@@ -7,7 +7,7 @@ using System.Net.Sockets;
 namespace ClientQueryLib
 {
     public abstract class Handler
-    {
+    {  
         protected ManagerFormInterface parent;
         protected bool running;
         protected Socket connection;
