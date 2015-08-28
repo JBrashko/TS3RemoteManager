@@ -30,8 +30,8 @@ namespace ClientQueryMonitor
         private Color notifyColor = Color.LightSkyBlue;
         private KeepAlive keepAlive;
         private RemoteInterface manager;
-        private HttpHost httpHost;
-        private ShttpHost shttpHost;
+        private Host httpHost;
+        private SecureHost shttpHost;
         private TS3ClientHandler TS3ClientStuff;
         List<RemoteInterface> RemoteInterfaces = new List<RemoteInterface>();
         List<CommandLog> CommandHistory = new List<CommandLog>();
@@ -273,7 +273,7 @@ namespace ClientQueryMonitor
             addLogMessage("Started listening on port:" + port, false);
             AsyncCallback callback = new AsyncCallback(ListenCallback);
             listener.BeginAccept(callback, listener);*/
-            httpHost = new HttpHost(this);
+            httpHost = new Host(this);
             hostStart.Enabled = false;
         }
 
@@ -443,7 +443,7 @@ namespace ClientQueryMonitor
          // AsyncCallback callback = new AsyncCallback(ListenCallback);
          // listener.BeginAccept(callback, listener);
          // hostStart.Enabled = false;
-            shttpHost = new ShttpHost(this);
+            shttpHost = new SecureHost(this);
             hostSecureStart.Enabled = false;
         }
 

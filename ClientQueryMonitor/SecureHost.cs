@@ -10,11 +10,11 @@ using System.Threading;
 
 namespace ClientQueryMonitor
 {
-    class ShttpHost : RemoteHost
+    class SecureHost : RemoteHost
     {
         static X509Certificate serverCertificate = null;
         private RemoteManager manager;
-        public ShttpHost (RemoteManager _manager)
+        public SecureHost (RemoteManager _manager)
         {
             manager = _manager;
             serverCertificate = X509Certificate.CreateFromCertFile(ClientQueryMonitor.Properties.Settings.Default.CertificatePath);

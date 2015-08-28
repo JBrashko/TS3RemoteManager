@@ -9,10 +9,10 @@ using System.Threading;
 
 namespace ClientQueryMonitor
 {
-    class HttpHost : RemoteHost
+    class Host : RemoteHost
     {
         private RemoteManager manager;
-        public HttpHost (RemoteManager _manager)
+        public Host (RemoteManager _manager)
         {
             manager = _manager;
             hostStart();
