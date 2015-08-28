@@ -58,7 +58,7 @@ namespace ClientQueryLib
             running = false;
             if (thisthread.ThreadState != ThreadState.Stopped)
             {
-                thisthread.Abort();
+                thisthread.Interrupt();
             }
         }
         public void addSleepTime()

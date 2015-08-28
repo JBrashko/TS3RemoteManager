@@ -52,6 +52,7 @@
     <Compile Include="RemoteHandler.cs" />
     <Compile Include="RemoteInterface.cs" />
     <Compile Include="RemoteUSBHandler.cs" />
+    <Compile Include="SecureRemoteHandler.cs" />
     <Compile Include="TS3ClientHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

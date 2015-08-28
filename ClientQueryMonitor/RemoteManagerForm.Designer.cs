@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.ConnectButton = new System.Windows.Forms.Button();
-            this.ClientIPtext = new System.Windows.Forms.TextBox();
             this.hostStart = new System.Windows.Forms.Button();
             this.sndButton = new System.Windows.Forms.Button();
             this.sndBox = new System.Windows.Forms.TextBox();
@@ -62,18 +61,24 @@
             this.hostUSBstart = new System.Windows.Forms.Button();
             this.USBScan = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MessageTabControl.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.LogTab.SuspendLayout();
             this.managerPage.SuspendLayout();
             this.NotifyMessages.SuspendLayout();
             this.AutomaticMessageTab.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ConnectButton
             // 
             this.ConnectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ConnectButton.Location = new System.Drawing.Point(567, 12);
+            this.ConnectButton.Location = new System.Drawing.Point(12, 27);
             this.ConnectButton.Name = "ConnectButton";
             this.ConnectButton.Size = new System.Drawing.Size(75, 23);
             this.ConnectButton.TabIndex = 0;
@@ -81,20 +86,10 @@
             this.ConnectButton.UseVisualStyleBackColor = true;
             this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
             // 
-            // ClientIPtext
-            // 
-            this.ClientIPtext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ClientIPtext.Location = new System.Drawing.Point(12, 15);
-            this.ClientIPtext.Name = "ClientIPtext";
-            this.ClientIPtext.Size = new System.Drawing.Size(549, 20);
-            this.ClientIPtext.TabIndex = 1;
-            this.ClientIPtext.Text = "127.0.0.1";
-            // 
             // hostStart
             // 
             this.hostStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.hostStart.Location = new System.Drawing.Point(567, 41);
+            this.hostStart.Location = new System.Drawing.Point(567, 27);
             this.hostStart.Name = "hostStart";
             this.hostStart.Size = new System.Drawing.Size(75, 23);
             this.hostStart.TabIndex = 3;
@@ -119,7 +114,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sndBox.Location = new System.Drawing.Point(6, 261);
             this.sndBox.Name = "sndBox";
-            this.sndBox.Size = new System.Drawing.Size(529, 22);
+            this.sndBox.Size = new System.Drawing.Size(529, 20);
             this.sndBox.TabIndex = 6;
             this.sndBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.sndBox_KeyPress);
             // 
@@ -133,10 +128,10 @@
             this.MessageTabControl.Controls.Add(this.managerPage);
             this.MessageTabControl.Controls.Add(this.NotifyMessages);
             this.MessageTabControl.Controls.Add(this.AutomaticMessageTab);
-            this.MessageTabControl.Location = new System.Drawing.Point(12, 70);
+            this.MessageTabControl.Location = new System.Drawing.Point(12, 56);
             this.MessageTabControl.Name = "MessageTabControl";
             this.MessageTabControl.SelectedIndex = 0;
-            this.MessageTabControl.Size = new System.Drawing.Size(630, 336);
+            this.MessageTabControl.Size = new System.Drawing.Size(630, 405);
             this.MessageTabControl.TabIndex = 7;
             // 
             // tabPage2
@@ -145,7 +140,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(622, 310);
+            this.tabPage2.Size = new System.Drawing.Size(622, 379);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "CQMessages";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -160,7 +155,7 @@
             this.MessageView.GridLines = true;
             this.MessageView.Location = new System.Drawing.Point(3, 3);
             this.MessageView.Name = "MessageView";
-            this.MessageView.Size = new System.Drawing.Size(616, 304);
+            this.MessageView.Size = new System.Drawing.Size(616, 373);
             this.MessageView.TabIndex = 0;
             this.MessageView.UseCompatibleStateImageBehavior = false;
             this.MessageView.View = System.Windows.Forms.View.Details;
@@ -219,7 +214,7 @@
             this.managerPage.Controls.Add(this.managerCQMessages);
             this.managerPage.Controls.Add(this.sndButton);
             this.managerPage.Controls.Add(this.sndBox);
-            this.managerPage.Font = new System.Drawing.Font("Microsoft MHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.managerPage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.managerPage.ForeColor = System.Drawing.SystemColors.ControlText;
             this.managerPage.Location = new System.Drawing.Point(4, 22);
             this.managerPage.Name = "managerPage";
@@ -343,7 +338,7 @@
             // hostSecureStart
             // 
             this.hostSecureStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.hostSecureStart.Location = new System.Drawing.Point(464, 41);
+            this.hostSecureStart.Location = new System.Drawing.Point(464, 27);
             this.hostSecureStart.Name = "hostSecureStart";
             this.hostSecureStart.Size = new System.Drawing.Size(97, 23);
             this.hostSecureStart.TabIndex = 8;
@@ -353,7 +348,7 @@
             // 
             // hostUSBstart
             // 
-            this.hostUSBstart.Location = new System.Drawing.Point(362, 41);
+            this.hostUSBstart.Location = new System.Drawing.Point(373, 27);
             this.hostUSBstart.Name = "hostUSBstart";
             this.hostUSBstart.Size = new System.Drawing.Size(85, 23);
             this.hostUSBstart.TabIndex = 9;
@@ -363,7 +358,7 @@
             // 
             // USBScan
             // 
-            this.USBScan.Location = new System.Drawing.Point(12, 41);
+            this.USBScan.Location = new System.Drawing.Point(269, 27);
             this.USBScan.Name = "USBScan";
             this.USBScan.Size = new System.Drawing.Size(98, 23);
             this.USBScan.TabIndex = 10;
@@ -373,25 +368,60 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 409);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 464);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(654, 22);
             this.statusStrip1.TabIndex = 11;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(105, 17);
+            this.toolStripStatusLabel1.Text = "Clients connected:";
+            this.toolStripStatusLabel1.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(654, 24);
+            this.menuStrip1.TabIndex = 12;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editSettingsToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // editSettingsToolStripMenuItem
+            // 
+            this.editSettingsToolStripMenuItem.Name = "editSettingsToolStripMenuItem";
+            this.editSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editSettingsToolStripMenuItem.Text = "Edit Settings";
+            this.editSettingsToolStripMenuItem.Click += new System.EventHandler(this.editSettingsToolStripMenuItem_Click);
+            // 
             // RemoteManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(654, 431);
+            this.ClientSize = new System.Drawing.Size(654, 486);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.USBScan);
             this.Controls.Add(this.hostUSBstart);
             this.Controls.Add(this.hostSecureStart);
             this.Controls.Add(this.MessageTabControl);
             this.Controls.Add(this.hostStart);
-            this.Controls.Add(this.ClientIPtext);
             this.Controls.Add(this.ConnectButton);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "RemoteManager";
             this.Text = "CQRemoteManager";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.RemoteManager_FormClosed);
@@ -402,6 +432,10 @@
             this.managerPage.PerformLayout();
             this.NotifyMessages.ResumeLayout(false);
             this.AutomaticMessageTab.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -410,7 +444,6 @@
         #endregion
 
         private System.Windows.Forms.Button ConnectButton;
-        private System.Windows.Forms.TextBox ClientIPtext;
         private System.Windows.Forms.Button hostStart;
         private System.Windows.Forms.Button sndButton;
         private System.Windows.Forms.TextBox sndBox;
@@ -443,6 +476,10 @@
         private System.Windows.Forms.Button hostUSBstart;
         private System.Windows.Forms.Button USBScan;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editSettingsToolStripMenuItem;
     }
 }
 

@@ -30,7 +30,9 @@ namespace ClientQueryMonitor
         private Color notifyColor = Color.LightSkyBlue;
         private KeepAlive keepAlive;
         private RemoteInterface manager;
-        TS3ClientHandler TS3ClientStuff;
+        private HttpHost httpHost;
+        private ShttpHost shttpHost;
+        private TS3ClientHandler TS3ClientStuff;
         List<RemoteInterface> RemoteInterfaces = new List<RemoteInterface>();
         List<CommandLog> CommandHistory = new List<CommandLog>();
         int HistoryPosition = 0;
@@ -55,7 +57,7 @@ namespace ClientQueryMonitor
         private void TS3ClientConnect()
         {
             int conPort = 25639;
-            String ipAddressText = ClientIPtext.Text;
+            String ipAddressText = ClientQueryMonitor.Properties.Settings.Default.IP;
             IPAddress IPaddress = IPAddress.Parse(ipAddressText);
             addLogMessage("Connecting to TSClient at:" + ipAddressText + ":" + conPort, false);
             Socket connection = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -258,7 +260,7 @@ namespace ClientQueryMonitor
         }
 
         private void hostStart_Click(object sender, EventArgs e)
-        {
+        {/*
             SocketPermission permission = new SocketPermission(NetworkAccess.Accept, TransportType.Tcp, "", SocketPermission.AllPorts);
             permission.Demand();
             int port = 25740;//Int32.Parse(hstPort.Text);
@@ -270,7 +272,8 @@ namespace ClientQueryMonitor
             listener.Listen(20);
             addLogMessage("Started listening on port:" + port, false);
             AsyncCallback callback = new AsyncCallback(ListenCallback);
-            listener.BeginAccept(callback, listener);
+            listener.BeginAccept(callback, listener);*/
+            httpHost = new HttpHost(this);
             hostStart.Enabled = false;
         }
 
@@ -312,7 +315,7 @@ namespace ClientQueryMonitor
         {
 
         }
-        public void ListenCallback(IAsyncResult result)
+      /*  public void ListenCallback(IAsyncResult result)
         {
             String verifyconnect = "TS3 Remote Manager" + Environment.NewLine + "TS3 remote connected successfully" + Environment.NewLine + "selected schandlerid=" + TS3ClientStuff.displayedSCHandler + Environment.NewLine;
             addLogMessage("Remote connected", false);
@@ -327,6 +330,26 @@ namespace ClientQueryMonitor
             handler.send(verifyconnect);
             addTabPage(makeRemotePage(handler));
             RemoteInterfaces.Add(handler);
+        }*/
+        public void addHandler(Socket sock)
+        {
+            String verifyconnect = "TS3 Remote Manager" + Environment.NewLine + "TS3 remote connected successfully" + Environment.NewLine + "selected schandlerid=" + TS3ClientStuff.displayedSCHandler + Environment.NewLine;
+            RemoteHandler handler = new RemoteHandler(sock, this, Color.Azure, RemoteInterfaces.Count);
+            Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
+            handleThread.Start();
+            handler.send(verifyconnect);
+            addTabPage(makeRemotePage(handler));
+            RemoteInterfaces.Add(handler);
+        }
+        public void addSecureHandler(Socket sock)
+        {
+            String verifyconnect = "TS3 Remote Manager" + Environment.NewLine + "TS3 remote connected successfully" + Environment.NewLine + "selected schandlerid=" + TS3ClientStuff.displayedSCHandler + Environment.NewLine;
+            SecureRemoteHandler handler = new SecureRemoteHandler(sock, this, Color.Azure, RemoteInterfaces.Count);
+        //    Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
+         //   handleThread.Start();
+          //  handler.send(verifyconnect);
+            //addTabPage(makeRemotePage(handler));
+          //  RemoteInterfaces.Add(handler);
         }
         private void addTabPage(TabPage page)
         {
@@ -406,7 +429,7 @@ namespace ClientQueryMonitor
         }
 
         private void hostSecureStart_Click(object sender, EventArgs e)
-        {
+        {/*
             SocketPermission permission = new SocketPermission(NetworkAccess.Accept, TransportType.Tcp, "", SocketPermission.AllPorts);
             permission.Demand();
             int port = 25741;//Int32.Parse(hstPort.Text);
@@ -416,10 +439,12 @@ namespace ClientQueryMonitor
             Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             listener.Bind(localEndPoint);
             listener.Listen(20);
-            addLogMessage("Started listening on port:" + port, false);
-            AsyncCallback callback = new AsyncCallback(ListenCallback);
-            listener.BeginAccept(callback, listener);
-            hostStart.Enabled = false;
+            addLogMessage("Started listening on port:" + port, false);*/
+         // AsyncCallback callback = new AsyncCallback(ListenCallback);
+         // listener.BeginAccept(callback, listener);
+         // hostStart.Enabled = false;
+            shttpHost = new ShttpHost(this);
+            hostSecureStart.Enabled = false;
         }
 
         private void hostUSBstart_Click(object sender, EventArgs e)
@@ -498,6 +523,18 @@ namespace ClientQueryMonitor
                     }
                 }
             }*/
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void editSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SettingsForm set = new SettingsForm();
+            set.ShowDialog();
+            
         }
     }
 }
