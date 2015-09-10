@@ -33,7 +33,7 @@ namespace ClientQueryLib
             get { return running; }
         }
 
-        int RemoteInterface.send(string message)
+        void RemoteInterface.send(string message)
         {
             throw new NotImplementedException();
         }

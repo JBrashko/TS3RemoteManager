@@ -10,7 +10,7 @@ namespace ClientQueryLib
     {
         bool recievesNotify { get; }
         bool isRunning { get; }
-        int send(String message);
+        void send(String message);
         Color HandlerColor { get; }
         int getID();
         int UsedSCHandler { get; set; }

@@ -27,9 +27,9 @@ namespace ClientQueryLib
             get { return true; }
         }
 
-        public int send(string message)
+        public void send(string message)
         {
-            return 0;
+            return;
             //throw new NotImplementedException();
         }
 

@@ -22,15 +22,27 @@ namespace ClientQueryMonitor
             SocketPermission permission = new SocketPermission(NetworkAccess.Accept, TransportType.Tcp, "", SocketPermission.AllPorts);
             permission.Demand();
             int port = 25740;//Int32.Parse(hstPort.Text);
-            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
-            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            listener.Bind(localEndPoint);
-            listener.Listen(20);
-           manager.addLogMessage("Started listening on port:" + port, false);
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());// Dns.Resolve(Dns.GetHostName());
             AsyncCallback callback = new AsyncCallback(ListenCallback);
-            listener.BeginAccept(callback, listener);
+            foreach (IPAddress Address in ipHostInfo.AddressList)
+            {
+                IPEndPoint localEndPoint = new IPEndPoint(Address, port);
+                Socket listener = new Socket(Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                listener.Bind(localEndPoint);
+                listener.Listen(20);
+                listener.BeginAccept(callback, listener);
+             
+            }
+            IPHostEntry ent = Dns.GetHostEntry("localhost");
+            foreach (IPAddress Address in ent.AddressList)
+            {
+                IPEndPoint localEndPoint = new IPEndPoint(Address, port);
+                Socket listener = new Socket(Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                listener.Bind(localEndPoint);
+                listener.Listen(20);
+                listener.BeginAccept(callback, listener);
+            }
+            manager.addLogMessage("Started listening on port:" + port, false);
             //hostStart.Enabled = false;
         }
         public void ListenCallback(IAsyncResult result)

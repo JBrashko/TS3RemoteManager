@@ -16,6 +16,7 @@ using LibUsbDotNet.Info;
 using System.Collections.ObjectModel;
 using LibUsbDotNet.DeviceNotify;
 using ClientQueryLib;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ClientQueryMonitor
 {
@@ -33,6 +34,7 @@ namespace ClientQueryMonitor
         private Host httpHost;
         private SecureHost shttpHost;
         private TS3ClientHandler TS3ClientStuff;
+        private static X509Certificate2 serverCertificate = null;
         List<RemoteInterface> RemoteInterfaces = new List<RemoteInterface>();
         List<CommandLog> CommandHistory = new List<CommandLog>();
         int HistoryPosition = 0;
@@ -53,6 +55,10 @@ namespace ClientQueryMonitor
         private void ConnectButton_Click(object sender, EventArgs e)
         {
             TS3ClientConnect();
+            hostSecureStart.Enabled = true;
+            hostStart.Enabled = true;
+            hostUSBstart.Enabled = true;
+            ConnectButton.Enabled = false;
         }
         private void TS3ClientConnect()
         {
@@ -297,12 +303,12 @@ namespace ClientQueryMonitor
             CommandHistory.Add(new CommandLog(command, handler));
             try
             {
-                int i = TS3ClientStuff.send(command.Trim() + '\r' + '\n');
+               TS3ClientStuff.send(command.Trim() + '\r' + '\n');
             }
             catch (HandlerException ex)
             {
                 TS3ClientConnect();
-                int i = TS3ClientStuff.send(command.Trim() + '\r' + '\n');
+                TS3ClientStuff.send(command.Trim() + '\r' + '\n');
             }
             keepAlive.addSleepTime();
 
@@ -315,22 +321,34 @@ namespace ClientQueryMonitor
         {
 
         }
-      /*  public void ListenCallback(IAsyncResult result)
+        public X509Certificate2 getCert()
+        {   if (serverCertificate ==null)
+            {
+                initialiseCert();
+                //throw new Exception();
+            }
+            return serverCertificate;
+        }
+        private void initialiseCert()
         {
-            String verifyconnect = "TS3 Remote Manager" + Environment.NewLine + "TS3 remote connected successfully" + Environment.NewLine + "selected schandlerid=" + TS3ClientStuff.displayedSCHandler + Environment.NewLine;
-            addLogMessage("Remote connected", false);
-            Socket listener = null;
-            Socket handlerSocket = null;
-            listener = (Socket)result.AsyncState;
-            handlerSocket = listener.EndAccept(result);
-            listener.BeginAccept(new AsyncCallback(ListenCallback), listener);
-            RemoteHandler handler = new RemoteHandler(handlerSocket, this, Color.Azure, RemoteInterfaces.Count);
-            Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
-            handleThread.Start();
-            handler.send(verifyconnect);
-            addTabPage(makeRemotePage(handler));
-            RemoteInterfaces.Add(handler);
-        }*/
+          serverCertificate = new X509Certificate2(ClientQueryMonitor.Properties.Settings.Default.CertificatePath);
+        }
+        /*  public void ListenCallback(IAsyncResult result)
+          {
+              String verifyconnect = "TS3 Remote Manager" + Environment.NewLine + "TS3 remote connected successfully" + Environment.NewLine + "selected schandlerid=" + TS3ClientStuff.displayedSCHandler + Environment.NewLine;
+              addLogMessage("Remote connected", false);
+              Socket listener = null;
+              Socket handlerSocket = null;
+              listener = (Socket)result.AsyncState;
+              handlerSocket = listener.EndAccept(result);
+              listener.BeginAccept(new AsyncCallback(ListenCallback), listener);
+              RemoteHandler handler = new RemoteHandler(handlerSocket, this, Color.Azure, RemoteInterfaces.Count);
+              Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
+              handleThread.Start();
+              handler.send(verifyconnect);
+              addTabPage(makeRemotePage(handler));
+              RemoteInterfaces.Add(handler);
+          }*/
         public void addHandler(Socket sock)
         {
             String verifyconnect = "TS3 Remote Manager" + Environment.NewLine + "TS3 remote connected successfully" + Environment.NewLine + "selected schandlerid=" + TS3ClientStuff.displayedSCHandler + Environment.NewLine;
@@ -344,10 +362,10 @@ namespace ClientQueryMonitor
         public void addSecureHandler(Socket sock)
         {
             String verifyconnect = "TS3 Remote Manager" + Environment.NewLine + "TS3 remote connected successfully" + Environment.NewLine + "selected schandlerid=" + TS3ClientStuff.displayedSCHandler + Environment.NewLine;
-            SecureRemoteHandler handler = new SecureRemoteHandler(sock, this, Color.Azure, RemoteInterfaces.Count);
-        //    Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
-         //   handleThread.Start();
-          //  handler.send(verifyconnect);
+            SecureRemoteHandler handler = new SecureRemoteHandler(sock, this, Color.Azure, RemoteInterfaces.Count,getCert());
+            Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
+            handleThread.Start();
+            handler.send(verifyconnect);
             //addTabPage(makeRemotePage(handler));
           //  RemoteInterfaces.Add(handler);
         }
@@ -535,6 +553,11 @@ namespace ClientQueryMonitor
             SettingsForm set = new SettingsForm();
             set.ShowDialog();
             
+        }
+
+        public int getDisplayedSCHandlerID()
+        {
+            return TS3ClientStuff.displayedSCHandler;
         }
     }
 }

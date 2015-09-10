@@ -22,29 +22,35 @@ namespace ClientQueryLib
         }
         public void doStuff()
         {
-            thisthread = Thread.CurrentThread;
-            thisthread.Name = "Keep alive thread";
-            if (!running)
-            {
-                return;
+            try {
+                thisthread = Thread.CurrentThread;
+                thisthread.Name = "Keep alive thread";
+                if (!running)
+                {
+                    return;
+                }
+                Thread.Sleep(10 * 1000);
+                while (running)
+                {
+
+                    try
+                    {
+                        sendKeepAlive();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        parent.addLogMessage("Error sending KeepAlive message", true);
+                    }
+                    finally
+                    {
+                        resetSleepTime();
+                    }
+                }
             }
-            Thread.Sleep(10 * 1000);
-            while (running)
+            catch (ThreadInterruptedException ex)
             {
-
-                try
-                {
-                    sendKeepAlive();
-
-                }
-                catch (Exception ex)
-                {
-                    parent.addLogMessage("Error sending KeepAlive message", true);
-                }
-                finally
-                {
-                    resetSleepTime();
-                }
+                String s = ex.ToString();
             }
         }
         private void sendKeepAlive()

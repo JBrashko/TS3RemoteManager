@@ -15,6 +15,8 @@ namespace ClientQueryLib
         {
             running = true;
             connection = _connection;
+            netStream = new NetworkStream(connection,true);
+            stream = netStream;
             parent = _parent;
         }
         protected override void processMessage(string message)
@@ -66,7 +68,6 @@ namespace ClientQueryLib
             {
                 case 0:
                     return "TS3 Client";
-                    break;
                 case 1:
                     return "Welcome to the TeamSpeak 3 ClientQuery interface, type \"help\" for a list of commands and \"help <command>\" for information on a specific command.";
                 case 2:

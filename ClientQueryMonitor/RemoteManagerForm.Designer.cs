@@ -1,4 +1,6 @@
-﻿namespace ClientQueryMonitor
+﻿using System;
+
+namespace ClientQueryMonitor
 {
     partial class RemoteManager
     {
@@ -19,6 +21,8 @@
             }
             base.Dispose(disposing);
         }
+
+
 
         #region Windows Form Designer generated code
 
@@ -89,6 +93,7 @@
             // hostStart
             // 
             this.hostStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.hostStart.Enabled = false;
             this.hostStart.Location = new System.Drawing.Point(567, 27);
             this.hostStart.Name = "hostStart";
             this.hostStart.Size = new System.Drawing.Size(75, 23);
@@ -180,7 +185,7 @@
             this.LogTab.Location = new System.Drawing.Point(4, 22);
             this.LogTab.Name = "LogTab";
             this.LogTab.Padding = new System.Windows.Forms.Padding(3);
-            this.LogTab.Size = new System.Drawing.Size(622, 310);
+            this.LogTab.Size = new System.Drawing.Size(622, 379);
             this.LogTab.TabIndex = 2;
             this.LogTab.Text = "RemoteLog";
             this.LogTab.UseVisualStyleBackColor = true;
@@ -195,7 +200,7 @@
             this.LogView.GridLines = true;
             this.LogView.Location = new System.Drawing.Point(3, 3);
             this.LogView.Name = "LogView";
-            this.LogView.Size = new System.Drawing.Size(616, 304);
+            this.LogView.Size = new System.Drawing.Size(616, 373);
             this.LogView.TabIndex = 1;
             this.LogView.UseCompatibleStateImageBehavior = false;
             this.LogView.View = System.Windows.Forms.View.Details;
@@ -219,7 +224,7 @@
             this.managerPage.Location = new System.Drawing.Point(4, 22);
             this.managerPage.Name = "managerPage";
             this.managerPage.Padding = new System.Windows.Forms.Padding(3);
-            this.managerPage.Size = new System.Drawing.Size(622, 310);
+            this.managerPage.Size = new System.Drawing.Size(622, 379);
             this.managerPage.TabIndex = 3;
             this.managerPage.Text = "Manager Messages";
             this.managerPage.UseVisualStyleBackColor = true;
@@ -261,7 +266,7 @@
             this.NotifyMessages.Location = new System.Drawing.Point(4, 22);
             this.NotifyMessages.Name = "NotifyMessages";
             this.NotifyMessages.Padding = new System.Windows.Forms.Padding(3);
-            this.NotifyMessages.Size = new System.Drawing.Size(622, 310);
+            this.NotifyMessages.Size = new System.Drawing.Size(622, 379);
             this.NotifyMessages.TabIndex = 4;
             this.NotifyMessages.Text = "NotifyMessages";
             this.NotifyMessages.UseVisualStyleBackColor = true;
@@ -276,7 +281,7 @@
             this.NotifyMessageView.GridLines = true;
             this.NotifyMessageView.Location = new System.Drawing.Point(3, 3);
             this.NotifyMessageView.Name = "NotifyMessageView";
-            this.NotifyMessageView.Size = new System.Drawing.Size(616, 304);
+            this.NotifyMessageView.Size = new System.Drawing.Size(616, 373);
             this.NotifyMessageView.TabIndex = 1;
             this.NotifyMessageView.UseCompatibleStateImageBehavior = false;
             this.NotifyMessageView.View = System.Windows.Forms.View.Details;
@@ -301,7 +306,7 @@
             this.AutomaticMessageTab.Location = new System.Drawing.Point(4, 22);
             this.AutomaticMessageTab.Name = "AutomaticMessageTab";
             this.AutomaticMessageTab.Padding = new System.Windows.Forms.Padding(3);
-            this.AutomaticMessageTab.Size = new System.Drawing.Size(622, 310);
+            this.AutomaticMessageTab.Size = new System.Drawing.Size(622, 379);
             this.AutomaticMessageTab.TabIndex = 5;
             this.AutomaticMessageTab.Text = "Automatic Messages";
             this.AutomaticMessageTab.UseVisualStyleBackColor = true;
@@ -316,7 +321,7 @@
             this.AutoMessageView.GridLines = true;
             this.AutoMessageView.Location = new System.Drawing.Point(3, 3);
             this.AutoMessageView.Name = "AutoMessageView";
-            this.AutoMessageView.Size = new System.Drawing.Size(616, 304);
+            this.AutoMessageView.Size = new System.Drawing.Size(616, 373);
             this.AutoMessageView.TabIndex = 2;
             this.AutoMessageView.UseCompatibleStateImageBehavior = false;
             this.AutoMessageView.View = System.Windows.Forms.View.Details;
@@ -338,6 +343,7 @@
             // hostSecureStart
             // 
             this.hostSecureStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.hostSecureStart.Enabled = false;
             this.hostSecureStart.Location = new System.Drawing.Point(464, 27);
             this.hostSecureStart.Name = "hostSecureStart";
             this.hostSecureStart.Size = new System.Drawing.Size(97, 23);
@@ -348,6 +354,7 @@
             // 
             // hostUSBstart
             // 
+            this.hostUSBstart.Enabled = false;
             this.hostUSBstart.Location = new System.Drawing.Point(373, 27);
             this.hostUSBstart.Name = "hostUSBstart";
             this.hostUSBstart.Size = new System.Drawing.Size(85, 23);
@@ -404,7 +411,7 @@
             // editSettingsToolStripMenuItem
             // 
             this.editSettingsToolStripMenuItem.Name = "editSettingsToolStripMenuItem";
-            this.editSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editSettingsToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.editSettingsToolStripMenuItem.Text = "Edit Settings";
             this.editSettingsToolStripMenuItem.Click += new System.EventHandler(this.editSettingsToolStripMenuItem_Click);
             // 
