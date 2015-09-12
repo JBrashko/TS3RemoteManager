@@ -21,8 +21,8 @@ namespace ClientQueryMonitor
         {
             SocketPermission permission = new SocketPermission(NetworkAccess.Accept, TransportType.Tcp, "", SocketPermission.AllPorts);
             permission.Demand();
-            int port = 25740;//Int32.Parse(hstPort.Text);
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());// Dns.Resolve(Dns.GetHostName());
+            int port = 25740;
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             AsyncCallback callback = new AsyncCallback(ListenCallback);
             foreach (IPAddress Address in ipHostInfo.AddressList)
             {
@@ -43,7 +43,6 @@ namespace ClientQueryMonitor
                 listener.BeginAccept(callback, listener);
             }
             manager.addLogMessage("Started listening on port:" + port, false);
-            //hostStart.Enabled = false;
         }
         public void ListenCallback(IAsyncResult result)
         {
@@ -55,12 +54,6 @@ namespace ClientQueryMonitor
             handlerSocket = listener.EndAccept(result);
             listener.BeginAccept(new AsyncCallback(ListenCallback), listener);
             manager.addHandler(handlerSocket);
-            /*RemoteHandler handler = new RemoteHandler(handlerSocket, this, Color.Azure, RemoteInterfaces.Count);
-            Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
-            handleThread.Start();
-            handler.send(verifyconnect);
-            addTabPage(makeRemotePage(handler));
-            RemoteInterfaces.Add(handler);*/
         }
     }
 }

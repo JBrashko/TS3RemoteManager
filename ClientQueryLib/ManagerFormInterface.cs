@@ -10,7 +10,6 @@ namespace ClientQueryLib
     {
          void addRecievedCQMessage(String message);
          void addLogMessage(String message, bool error);
-         //void ListenCallback(IAsyncResult result);
          void addHandledCQCommand(String command, RemoteInterface handler);
          void sendCQCommand(String command, RemoteInterface handler);
          X509Certificate2 getCert();

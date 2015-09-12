@@ -45,7 +45,7 @@ namespace ClientQueryLib
                     builder = new StringBuilder();
                     myReadBuffer = new byte[1024];
                     bytes = stream.Read(myReadBuffer, 0, myReadBuffer.Length);
-                    //pos = stream.Position;
+                   // pos = stream.Position;
                     builder.AppendFormat("{0}", Encoding.ASCII.GetString(myReadBuffer, 0, bytes));
                     tmp = buffer + builder.ToString();
                     CQMessages = tmp.Split('\n');

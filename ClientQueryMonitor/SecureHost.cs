@@ -27,18 +27,15 @@ namespace ClientQueryMonitor
             SocketPermission permission = new SocketPermission(NetworkAccess.Accept, TransportType.Tcp, "", SocketPermission.AllPorts);
             permission.Demand();
             int port = 25741;//Int32.Parse(hstPort.Text
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());// Dns.Resolve(Dns.GetHostName());
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             AsyncCallback callback = new AsyncCallback(ListenCallback);
             foreach (IPAddress Address in ipHostInfo.AddressList)
             {
-               // if(Address.AddressFamily== AddressFamily.InterNetwork)
-              //  {
                 IPEndPoint localEndPoint = new IPEndPoint(Address, port);
                 Socket listener = new Socket(Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 listener.Bind(localEndPoint);
                 listener.Listen(20);
                 listener.BeginAccept(callback, listener);
-            //    }
             }
             IPHostEntry ent = Dns.GetHostEntry("localhost");
             foreach (IPAddress Address in ent.AddressList)
@@ -51,8 +48,6 @@ namespace ClientQueryMonitor
             }
             manager.addLogMessage("Started listening on port:" + port, false);
             
-            
-            //hostStart.Enabled = false;
         }
         public void ListenCallback(IAsyncResult result)
         {
@@ -63,12 +58,6 @@ namespace ClientQueryMonitor
             handlerSocket = listener.EndAccept(result);
             listener.BeginAccept(new AsyncCallback(ListenCallback), listener);
             manager.addSecureHandler(handlerSocket);
-            /*RemoteHandler handler = new RemoteHandler(handlerSocket, this, Color.Azure, RemoteInterfaces.Count);
-            Thread handleThread = new Thread(new ThreadStart(handler.ReadData));
-            handleThread.Start();
-            handler.send(verifyconnect);
-            addTabPage(makeRemotePage(handler));
-            RemoteInterfaces.Add(handler);*/
         }
     }
 }

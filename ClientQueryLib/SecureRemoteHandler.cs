@@ -15,16 +15,22 @@ namespace ClientQueryLib
     {
         private SslStream secureStream;
         public SecureRemoteHandler(Socket _connection, ManagerFormInterface _parent, Color _handlerColor, int _ID, X509Certificate2 cert) :base(_connection,_parent,_handlerColor,_ID)
-        { //_connection.SocketType
-            //stream = new SslStream()
+        { 
             try {
                 secureStream = new SslStream(this.netStream,false);
-                //X509Certificate cert = parent.getCert();
-                //secureStream.AuthenticateAsServer(cert,false,System.Security.Authentication.SslProtocols.Tls,false);
+                secureStream.AuthenticateAsServer(cert,false,System.Security.Authentication.SslProtocols.Tls,false);
                 stream = secureStream;
                 String s = _connection.Connected.ToString();
                 String p = _connection.RemoteEndPoint.ToString();
-                this.send("Hello");
+                Console.WriteLine("Cipher: {0} strength {1}", secureStream.CipherAlgorithm, secureStream.CipherStrength);
+                Console.WriteLine("Hash: {0} strength {1}", secureStream.HashAlgorithm, secureStream.HashStrength);
+                Console.WriteLine("Key exchange: {0} strength {1}", secureStream.KeyExchangeAlgorithm, secureStream.KeyExchangeStrength);
+                Console.WriteLine("Protocol: {0}", secureStream.SslProtocol);
+                Console.WriteLine("Is authenticated: {0} as server? {1}", secureStream.IsAuthenticated, secureStream.IsServer);
+                Console.WriteLine("IsSigned: {0}", secureStream.IsSigned);
+                Console.WriteLine("Is Encrypted: {0}", secureStream.IsEncrypted);
+                Console.WriteLine("Can read: {0}, write {1}", secureStream.CanRead, secureStream.CanWrite);
+                Console.WriteLine("Can timeout: {0}", secureStream.CanTimeout);
             }
             catch (AuthenticationException ex)
             {
@@ -47,64 +53,6 @@ namespace ClientQueryLib
         {
             String a = command.ToString();
             base.processMessage(a);
-        }
-        public override void send(string command)
-        {
-            if (!running)
-            {
-                throw new HandlerException("Handler is not running");
-            }
-            try
-            {
-                byte[] buffer = new Byte[256];
-                byte[] message = Encoding.UTF8.GetBytes(command.Trim() + '\r' + '\n');
-                return;// connection.Send(message);
-            }
-            catch (SocketException ex)
-            {
-                this.BeginClose();
-                throw new HandlerException(ex.Data.ToString());
-
-            }
-        }
-        public override void ReadData()
-        {
-            try
-            {
-                int bytes = 0;
-                Byte[] bytesReceived = new Byte[256];
-                String buffer = "";
-                int messageNumber = 0;
-                String[] CQCommands;
-                String CQCommand;
-                do
-                {
-                    bytes = connection.Receive(bytesReceived, bytesReceived.Length, 0);
-                    buffer += Encoding.ASCII.GetString(bytesReceived, 0, bytes);
-                    CQCommands = buffer.Split('\n');
-                    for (int i = 0; i < (CQCommands.Length - 1); i++)
-                    {
-                        CQCommand = CQCommands[i].Trim();
-                        messageNumber++;
-                        processMessage(CQCommand);
-
-                    }
-                    buffer = CQCommands[CQCommands.Length - 1];
-
-                }
-                while ((bytes > 0) && (running));
-                running = false;
-                parent.addLogMessage(getName() + " connection has closed", false);
-            }
-            catch (SocketException ex)
-            {
-                running = false;
-                parent.addLogMessage("A socket exception occoured in " + getName(), true);
-            }
-            finally
-            {
-                this.BeginClose();
-            }
         }
     }
 }

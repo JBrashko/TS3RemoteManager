@@ -28,7 +28,7 @@ namespace ClientQueryMonitor
         {
             OpenFileDialog diag = new OpenFileDialog();
             diag.FileName = ClientQueryMonitor.Properties.Settings.Default.CertificatePath;
-            diag.Filter = "Certificate file (*.cer)|*.cer";
+            diag.Filter = "Certificate file (*.pfx)|*.pfx";
             diag.InitialDirectory = ClientQueryMonitor.Properties.Settings.Default.CertificatePath;
             diag.CheckPathExists = true;
             diag.CheckFileExists = true;
