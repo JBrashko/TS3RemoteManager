@@ -35,24 +35,44 @@ namespace ClientQueryLib
             catch (AuthenticationException ex)
             {
                 Console.WriteLine("Auth exception " + ex);
+                if(ex.InnerException != null)
+                {
+                    Console.WriteLine("Inner exception " +ex.InnerException);
+                }
             }
             catch (IOException ex)
             {
                 Console.WriteLine("IO exception " + ex);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("Inner exception " + ex.InnerException);
+                }
             }
             catch(NotSupportedException ex)
             {
                 Console.WriteLine("Not supported exception " + ex);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("Inner exception " + ex.InnerException);
+                }
             }
             catch(Exception ex)
             {
                 Console.WriteLine("Generic exception " + ex);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("Inner exception " + ex.InnerException);
+                }
             }
         }
         protected override void processMessage(string command)
         {
             String a = command.ToString();
             base.processMessage(a);
+        }
+        public override void send(string message)
+        {
+            base.send(message);
         }
     }
 }
